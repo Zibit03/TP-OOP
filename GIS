@@ -103,6 +103,11 @@ public class GovernmentInformationSystem extends JFrame implements ActionListene
             // Sign up
             String username = usernameField.getText();
             char[] password = passwordField.getPassword();
+            
+            if (username.isEmpty() || password.length == 0) {
+                JOptionPane.showMessageDialog(this, "Please fill out all fields.");
+                return;
+            }
 
             // Save the username and password to a file
             try {
