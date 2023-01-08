@@ -1,0 +1,267 @@
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import java.util.*;
+import javax.swing.plaf.ColorUIResource;
+import java.awt.Color;
+import javax.swing.*;
+
+public class GovernmentInformationSystem extends JFrame implements ActionListener {
+    // Create GUI components
+    private JLabel usernameLabel = new JLabel("Username:");
+    private JTextField usernameField = new JTextField(20);
+    private JLabel passwordLabel = new JLabel("Password:");
+    private JPasswordField passwordField = new JPasswordField(20);
+    private JButton signUpButton = new JButton("Sign up");
+    private JButton logInButton = new JButton("Log in");
+
+    public GovernmentInformationSystem() {
+        // Set up the GUI
+        setTitle("Government Information System");
+        setForeground(Color.BLUE);
+        setSize(400, 200);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        panel.add(usernameLabel, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        panel.add(usernameField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        panel.add(passwordLabel, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        panel.add(passwordField, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        gbc.anchor = GridBagConstraints.WEST;
+        panel.add(signUpButton, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        gbc.anchor = GridBagConstraints.EAST;
+        panel.add(logInButton, gbc);
+
+        add(panel);
+        usernameLabel.setFont(new Font("Imprint MT Shadow", Font.BOLD, 18));
+        usernameField.setFont(new Font("Arial", Font.PLAIN, 14));
+        passwordLabel.setFont(new Font("Imprint MT Shadow", Font.BOLD, 18));
+        passwordField.setFont(new Font("Arial", Font.PLAIN, 14));
+        signUpButton.setFont(new Font("Imprint MT Shadow", Font.BOLD, 14));
+        logInButton.setFont(new Font("Imprint MT Shadow", Font.BOLD, 14));
+
+        // Add action listeners to the buttons
+        signUpButton.addActionListener(this);
+        logInButton.addActionListener(this);
+    }
+
+    // public GovernmentInformationSystem() {
+    // // Set up the GUI
+    // setTitle("Government Information System");
+    // setSize(400, 200);
+    // setLocationRelativeTo(null);
+    // setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+    // JPanel panel = new JPanel();
+    // panel.setLayout(new GridLayout(3, 2, 40, 50));
+
+    // panel.add(usernameLabel);
+    // panel.add(usernameField);
+    // panel.add(passwordLabel);
+    // panel.add(passwordField);
+    // panel.add(signUpButton);
+    // panel.add(logInButton);
+
+    // add(panel);
+    // usernameLabel.setFont(new Font("Imprint MT Shadow", Font.BOLD, 18));
+    // usernameField.setFont(new Font("Arial", Font.PLAIN, 14));
+    // passwordLabel.setFont(new Font("Imprint MT Shadow", Font.BOLD, 18));
+    // passwordField.setFont(new Font("Arial", Font.PLAIN, 14));
+    // signUpButton.setFont(new Font("Imprint MT Shadow", Font.BOLD, 10));
+    // logInButton.setFont(new Font("Imprint MT Shadow", Font.BOLD, 10));
+    // signUpButton.setPreferredSize(logInButton.getPreferredSize());
+
+    // // Add action listeners to the buttons
+    // signUpButton.addActionListener(this);
+    // logInButton.addActionListener(this);
+    // }
+
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == signUpButton) {
+            // Sign up
+            String username = usernameField.getText();
+            char[] password = passwordField.getPassword();
+
+            // Save the username and password to a file
+            try {
+                PrintWriter out = new PrintWriter(new FileWriter("credentials.txt"));
+                out.println(username);
+                out.println(password);
+                out.close();
+
+                JOptionPane.showMessageDialog(this, "Sign up successful!");
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        } else if (e.getSource() == logInButton) {
+            // Log in
+            String username = usernameField.getText();
+            char[] password = passwordField.getPassword();
+            // Read the username and password from the file
+            try {
+                Scanner in = new Scanner(new File("credentials.txt"));
+                String savedUsername = in.nextLine();
+                String savedPassword = in.nextLine();
+                in.close();
+
+                // Check if the entered username and password match the values in the file
+                if (username.equals(savedUsername) && new String(password).equals(savedPassword)) {
+                    JOptionPane.showMessageDialog(this, "Log in successful!");
+
+                    // Access the government information system
+                    while (true) {
+                        String[] options = { "Enter new data", "Update existing data", "Search for data", "Delete data",
+                                "Log out" };
+                        Font font = new Font("Adobe Caslon Pro", Font.BOLD, 12);
+
+                        UIManager.put("OptionPane.messageFont", font);
+                        int gisChoice = JOptionPane.showOptionDialog(this, "What do you want to do?",
+                                "Government Information System",
+                                JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options);
+
+                        if (gisChoice == 0) {
+                            // Enter new data
+                            String id = JOptionPane.showInputDialog(this, "Enter employee ID number:");
+                            String name = JOptionPane.showInputDialog(this, "Enter name:");
+                            String salary = JOptionPane.showInputDialog(this, "Enter salary:");
+
+                            if (name.isEmpty() || id.isEmpty() || salary.isEmpty()) {
+                                JOptionPane.showMessageDialog(this, "Please fill out all fields.");
+                            }
+                            // Append the new data to the text file
+                            else {
+                                PrintWriter out = new PrintWriter(new FileWriter("zi.txt", true));
+                                out.println(id + "," + name + "," + salary);
+                                out.close();
+
+                                JOptionPane.showMessageDialog(this, "Data added successfully!");
+                            }
+                        } else if (gisChoice == 1) {
+                            String id = JOptionPane.showInputDialog(this,
+                                    "Enter the employee ID number of the data you want to update:");
+
+                            // Read the data from the text file
+                            BufferedReader br = new BufferedReader(new FileReader("zi.txt"));
+                            String line;
+                            StringBuilder sb = new StringBuilder();
+                            boolean found = false; // Set found to false initially
+                            while ((line = br.readLine()) != null) {
+                                String[] parts = line.split(",");
+                                if (parts[0].equals(id)) {
+                                    // Update the data
+                                    found = true; // Set found to true if the data was found
+                                    String name = JOptionPane.showInputDialog(this, "Enter name:", parts[1]);
+                                    String salary = JOptionPane.showInputDialog(this, "Enter salary:", parts[2]);
+                                    parts[0] = id;
+                                    parts[1] = name;
+                                    parts[2] = salary;
+                                    line = parts[0] + ", " + parts[1] + ", " + parts[2];
+                                }
+                                sb.append(line).append("\n");
+                            }
+                            br.close();
+
+                            // Check if the data was found
+                            if (!found) {
+                                JOptionPane.showMessageDialog(this, "Error: Data with ID " + id + " not found.");
+                            } else {
+                                // Write the updated data back to the text file
+                                PrintWriter out = new PrintWriter(new FileWriter("zi.txt"));
+                                out.println(sb.toString());
+                                out.close();
+                            }
+
+                        } else if (gisChoice == 2) {
+                            // Search for data
+                            String id = JOptionPane.showInputDialog(this,
+                                    "Enter the employee ID number of the data you want to search for:");
+                            // Read the data from the text file
+                            BufferedReader br = new BufferedReader(new FileReader("zi.txt"));
+                            String line;
+                            String result = "Data not found.";
+                            while ((line = br.readLine()) != null) {
+                                String[] parts = line.split(",");
+                                if (parts[0].equals(id)) {
+                                    result = "ID: " + parts[0] + "\n" + "Name: " + parts[1] + "\n" + "Salary: "
+                                            + parts[2];
+                                    break;
+                                }
+                            }
+                            br.close();
+
+                            JOptionPane.showMessageDialog(this, result);
+                        } else if (gisChoice == 3) {
+                            // Delete data
+                            String id = JOptionPane.showInputDialog(this,
+                                    "Enter the employee ID number of the data you want to delete:");
+
+                            // Read the data from the text zi
+                            BufferedReader br = new BufferedReader(new FileReader("zi.txt"));
+                            String line;
+                            boolean found = false;
+                            StringBuilder sb = new StringBuilder();
+                            while ((line = br.readLine()) != null) {
+                                String[] parts = line.split(",");
+                                if (!parts[0].equals(id)) {
+                                    sb.append(line).append("\n");
+                                } else {
+                                    found = true;
+                                }
+                            }
+                            br.close();
+
+                            // Write the updated data back to the text file
+
+                            if (!found) {
+                                JOptionPane.showMessageDialog(this,
+                                        "Error: Data with ID " + id + " does not exist!");
+                            } else {
+                                // Write the updated data back to the text file
+                                PrintWriter out = new PrintWriter(new FileWriter("zi.txt"));
+                                out.println(sb.toString());
+                                out.close();
+
+                                JOptionPane.showMessageDialog(this, "Data deleted successfully!");
+                            }
+                        } else if (gisChoice == 4) {
+                            // Log out
+                            break;
+                        }
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Invalid username or password.");
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        // Show the GUI
+        GovernmentInformationSystem gis = new GovernmentInformationSystem();
+        gis.setVisible(true);
+    }
+}
