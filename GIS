@@ -2,28 +2,27 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.*;
-import javax.swing.plaf.ColorUIResource;
 import java.awt.Color;
 import javax.swing.*;
 
 public class GovernmentInformationSystem extends JFrame implements ActionListener {
     // Create GUI components
-    private JLabel usernameLabel = new JLabel("Username:");
-    private JTextField usernameField = new JTextField(20);
-    private JLabel passwordLabel = new JLabel("Password:");
-    private JPasswordField passwordField = new JPasswordField(20);
-    private JButton signUpButton = new JButton("Sign up");
-    private JButton logInButton = new JButton("Log in");
+    JLabel usernameLabel = new JLabel("Username:");
+    JTextField usernameField = new JTextField(20);
+    JLabel passwordLabel = new JLabel("Password:");
+    JPasswordField passwordField = new JPasswordField(20);
+    JButton signUpButton = new JButton("Sign up");
+    JButton logInButton = new JButton("Log in");
 
     public GovernmentInformationSystem() {
         // Set up the GUI
         setTitle("Government Information System");
-        setForeground(Color.BLUE);
         setSize(400, 200);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         JPanel panel = new JPanel();
+        // panel.setBackground(new Color(217, 184, 197));
         panel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
@@ -65,6 +64,7 @@ public class GovernmentInformationSystem extends JFrame implements ActionListene
         // Add action listeners to the buttons
         signUpButton.addActionListener(this);
         logInButton.addActionListener(this);
+
     }
 
     // public GovernmentInformationSystem() {
@@ -103,7 +103,7 @@ public class GovernmentInformationSystem extends JFrame implements ActionListene
             // Sign up
             String username = usernameField.getText();
             char[] password = passwordField.getPassword();
-            
+
             if (username.isEmpty() || password.length == 0) {
                 JOptionPane.showMessageDialog(this, "Please fill out all fields.");
                 return;
@@ -111,7 +111,8 @@ public class GovernmentInformationSystem extends JFrame implements ActionListene
 
             // Save the username and password to a file
             try {
-                PrintWriter out = new PrintWriter(new FileWriter("credentials.txt"));
+                PrintWriter out = new PrintWriter(new FileWriter("Desktop/CRUDCRUD/CRUDOne/credentials.txt"));
+                // PrintWriter out = new PrintWriter(new FileWriter("credentials.txt"));
                 out.println(username);
                 out.println(password);
                 out.close();
@@ -124,20 +125,28 @@ public class GovernmentInformationSystem extends JFrame implements ActionListene
             // Log in
             String username = usernameField.getText();
             char[] password = passwordField.getPassword();
+
+            if (username.isEmpty() || password.length == 0) {
+                JOptionPane.showMessageDialog(this, "Please fill out all fields.");
+                return;
+            }
+
             // Read the username and password from the file
             try {
-                Scanner in = new Scanner(new File("credentials.txt"));
+                Scanner in = new Scanner(new File("Desktop/CRUDCRUD/CRUDOne/credentials.txt"));
+                // Scanner in = new Scanner(new File("credentials.txt"));
                 String savedUsername = in.nextLine();
                 String savedPassword = in.nextLine();
                 in.close();
 
-                // Check if the entered username and password match the values in the file
+                // Check if the entered username and password match the credentials in the saved
+                // file
                 if (username.equals(savedUsername) && new String(password).equals(savedPassword)) {
                     JOptionPane.showMessageDialog(this, "Log in successful!");
 
                     // Access the government information system
                     while (true) {
-                        String[] options = { "Enter new data", "Update existing data", "Search for data", "Delete data",
+                        String[] options = { "Enter new data", "Search for data", "Update existing data", "Delete data",
                                 "Log out" };
                         Font font = new Font("Adobe Caslon Pro", Font.BOLD, 12);
 
@@ -157,23 +166,26 @@ public class GovernmentInformationSystem extends JFrame implements ActionListene
                             }
                             // Append the new data to the text file
                             else {
-                                PrintWriter out = new PrintWriter(new FileWriter("zi.txt", true));
-                                out.println(id + "," + name + "," + salary);
+                                PrintWriter out = new PrintWriter(
+                                        new FileWriter("Desktop/CRUDCRUD/CRUDOne/zi.txt", true));
+                                // new FileWriter(zi.txt", true));
+                                out.println(id + ", " + name + ", " + salary);
                                 out.close();
 
                                 JOptionPane.showMessageDialog(this, "Data added successfully!");
                             }
-                        } else if (gisChoice == 1) {
+                        } else if (gisChoice == 2) {
+                            // Update the data
                             String id = JOptionPane.showInputDialog(this,
                                     "Enter the employee ID number of the data you want to update:");
-
                             // Read the data from the text file
-                            BufferedReader br = new BufferedReader(new FileReader("zi.txt"));
+                            BufferedReader br = new BufferedReader(new FileReader("Desktop/CRUDCRUD/CRUDOne/zi.txt"));
+                            // BufferedReader br = new BufferedReader(new FileReader("zi.txt"));
                             String line;
                             StringBuilder sb = new StringBuilder();
                             boolean found = false; // Set found to false initially
                             while ((line = br.readLine()) != null) {
-                                String[] parts = line.split(",");
+                                String[] parts = line.split(", ");
                                 if (parts[0].equals(id)) {
                                     // Update the data
                                     found = true; // Set found to true if the data was found
@@ -187,27 +199,28 @@ public class GovernmentInformationSystem extends JFrame implements ActionListene
                                 sb.append(line).append("\n");
                             }
                             br.close();
-
+                            JOptionPane.showMessageDialog(this, "Data updated successfully!");
                             // Check if the data was found
                             if (!found) {
                                 JOptionPane.showMessageDialog(this, "Error: Data with ID " + id + " not found.");
                             } else {
                                 // Write the updated data back to the text file
-                                PrintWriter out = new PrintWriter(new FileWriter("zi.txt"));
+                                PrintWriter out = new PrintWriter(new FileWriter("Desktop/CRUDCRUD/CRUDOne/zi.txt"));
+                                // PrintWriter out = new PrintWriter(new FileWriter("zi.txt"));
                                 out.println(sb.toString());
                                 out.close();
                             }
 
-                        } else if (gisChoice == 2) {
+                        } else if (gisChoice == 1) {
                             // Search for data
-                            String id = JOptionPane.showInputDialog(this,
-                                    "Enter the employee ID number of the data you want to search for:");
+                            String id = JOptionPane.showInputDialog(this, "Enter the employee ID number of:");
                             // Read the data from the text file
-                            BufferedReader br = new BufferedReader(new FileReader("zi.txt"));
+                            BufferedReader br = new BufferedReader(new FileReader("Desktop/CRUDCRUD/CRUDOne/zi.txt"));
+                            // BufferedReader br = new BufferedReader(new FileReader("zi.txt"));
                             String line;
                             String result = "Data not found.";
                             while ((line = br.readLine()) != null) {
-                                String[] parts = line.split(",");
+                                String[] parts = line.split(", ");
                                 if (parts[0].equals(id)) {
                                     result = "ID: " + parts[0] + "\n" + "Name: " + parts[1] + "\n" + "Salary: "
                                             + parts[2];
@@ -223,12 +236,13 @@ public class GovernmentInformationSystem extends JFrame implements ActionListene
                                     "Enter the employee ID number of the data you want to delete:");
 
                             // Read the data from the text zi
-                            BufferedReader br = new BufferedReader(new FileReader("zi.txt"));
+                            BufferedReader br = new BufferedReader(new FileReader("Desktop/CRUDCRUD/CRUDOne/zi.txt"));
+                            // BufferedReader br = new BufferedReader(new FileReader("zi.txt"));
                             String line;
                             boolean found = false;
                             StringBuilder sb = new StringBuilder();
                             while ((line = br.readLine()) != null) {
-                                String[] parts = line.split(",");
+                                String[] parts = line.split(", ");
                                 if (!parts[0].equals(id)) {
                                     sb.append(line).append("\n");
                                 } else {
@@ -240,11 +254,11 @@ public class GovernmentInformationSystem extends JFrame implements ActionListene
                             // Write the updated data back to the text file
 
                             if (!found) {
-                                JOptionPane.showMessageDialog(this,
-                                        "Error: Data with ID " + id + " does not exist!");
+                                JOptionPane.showMessageDialog(this, "Error: Data with ID " + id + " does not exist!");
                             } else {
                                 // Write the updated data back to the text file
-                                PrintWriter out = new PrintWriter(new FileWriter("zi.txt"));
+                                PrintWriter out = new PrintWriter(new FileWriter("Desktop/CRUDCRUD/CRUDOne/zi.txt"));
+                                // PrintWriter out = new PrintWriter(new FileWriter("zi.txt"));
                                 out.println(sb.toString());
                                 out.close();
 
