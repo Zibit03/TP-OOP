@@ -302,7 +302,7 @@ public class InformationSystem extends JFrame {
                         found = true;
                         String name = JOptionPane.showInputDialog(this, "Enter the new name:", parts[1]);
                         String salary = JOptionPane.showInputDialog(this, "Enter the new salary:", parts[2]);
-                        String dept = JOptionPane.showInputDialog(this, "Enter the new salary:", parts[3]);
+                        String dept = JOptionPane.showInputDialog(this, "Enter the new department:", parts[3]);
                         // Append the new data to the string builder
                         parts[0] = id;
                         parts[1] = name;
