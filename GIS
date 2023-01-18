@@ -216,16 +216,18 @@ public class InformationSystem extends JFrame {
                     JOptionPane.QUESTION_MESSAGE);
             String salary = JOptionPane.showInputDialog(this, "Enter the employee salary:", "Employee Salary",
                     JOptionPane.QUESTION_MESSAGE);
+            String dept = JOptionPane.showInputDialog(this, "What department:", "Department",
+                    JOptionPane.QUESTION_MESSAGE);
 
             if (id == null || id.isEmpty() || name == null || name.isEmpty() || salary == null
-                    || salary.isEmpty()) {
+                    || salary.isEmpty() || dept.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Please fill out all the fields.", "Error",
                         JOptionPane.ERROR_MESSAGE);
                 return;
             }
             try {
                 BufferedWriter writer = new BufferedWriter(new FileWriter("zibit.txt", true));
-                writer.write(id + ": " + name + ": " + salary);
+                writer.write(id + ": " + name + ": " + salary + ": " + dept);
                 writer.newLine();
                 writer.close();
                 JOptionPane.showMessageDialog(this, "New data has been added successfully.", "Success",
@@ -257,7 +259,8 @@ public class InformationSystem extends JFrame {
                 while ((line = br.readLine()) != null) {
                     String[] parts = line.split(": ");
                     if (parts[0].equals(id)) {
-                        result = "ID: " + parts[0] + "\n" + "Name: " + parts[1] + "\n" + "Salary: " + parts[2];
+                        result = "ID: " + parts[0] + "\n" + "Name: " + parts[1] + "\n" + "Salary: " + parts[2] + "\n"
+                                + "Department: " + parts[3] + "\n";
                         break;
                     }
                 }
@@ -299,11 +302,13 @@ public class InformationSystem extends JFrame {
                         found = true;
                         String name = JOptionPane.showInputDialog(this, "Enter the new name:", parts[1]);
                         String salary = JOptionPane.showInputDialog(this, "Enter the new salary:", parts[2]);
+                        String dept = JOptionPane.showInputDialog(this, "Enter the new salary:", parts[3]);
                         // Append the new data to the string builder
                         parts[0] = id;
                         parts[1] = name;
                         parts[2] = salary;
-                        line = parts[0] + ": " + parts[1] + ": " + parts[2];
+                        parts[3] = dept;
+                        line = parts[0] + ": " + parts[1] + ": " + parts[2] + ": " + parts[3];
                         sb.append(line).append("\n");
                     }
                 }
