@@ -16,7 +16,7 @@ public class InformationSystem extends JFrame {
     private JButton signupButton;
 
     public InformationSystem() {
-        super("Information System");
+        super("Log In / Sign Up");
         // UIManager.put("JFrame.activeTitleBackground", Color.RED);
 
         JLabel usernameLabel = new JLabel("Username: ");
