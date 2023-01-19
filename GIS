@@ -1,4 +1,3 @@
-
 //================GOVERNMENT INFORMATION SYSTEM=================//
 import java.awt.*;
 import java.awt.event.*;
@@ -358,13 +357,20 @@ public class InformationSystem extends JFrame {
                     JOptionPane.showMessageDialog(this, "Please fill out the field.");
                 } else {
                     // Write the updated data back to the text file
+                    int confirm = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete the data?", "Confirm",
+                        JOptionPane.YES_NO_OPTION);
+                if (confirm == JOptionPane.NO_OPTION) {
+                    return;                
+                } else {
                     PrintWriter out = new PrintWriter(new FileWriter("zibit.txt"));
                     // PrintWriter out = new PrintWriter(new FileWriter("zi.txt"));
                     out.println(sb.toString());
                     out.close();
-
                     JOptionPane.showMessageDialog(this, "Data deleted successfully!");
+                    return;
                 }
+            }                    
+                                 
             } catch (IOException e) {
                 e.printStackTrace();
             }
